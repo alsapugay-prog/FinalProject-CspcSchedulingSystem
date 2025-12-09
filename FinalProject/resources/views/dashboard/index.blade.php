@@ -13,111 +13,231 @@
   }
 
   .enhanced-card {
-    background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
-    border: 2px solid #000; /* black border */
-    backdrop-filter: blur(10px);
-    border-radius: 20px;
-    padding: 2.5rem;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 2rem;
     transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
-
-    /* make all cards equal height and layout content vertically */
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
     height: 100%;
-  }
-
-  .enhanced-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-    transition: left 0.5s;
   }
 
   .enhanced-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
-    border-color: rgba(0,0,0,0.9); /* keep hover border visible */
-  }
-
-  .enhanced-card:hover::before {
-    left: 100%;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0,0,0,0.12);
+    border-color: #667eea;
   }
 
   .stat-icon {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2rem;
-    margin: 0 auto 1.5rem;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
   }
 
   .stat-number {
-    font-size: 2.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #667eea, #764ba2);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin: 1rem 0;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #667eea;
+    margin: 0.5rem 0;
   }
 
-  /* ensure row stretches columns so .enhanced-card height:100% works */
-  .row.equal-cards {
-    align-items: stretch;
+  .stat-label {
+    font-size: 0.95rem;
+    color: #333;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+  }
+
+  .stat-description {
+    font-size: 0.85rem;
+    color: #999;
+  }
+
+  .content-section {
+    margin-top: 3rem;
+  }
+
+  .section-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 3px solid #667eea;
+  }
+
+  .announcement-item {
+    background: #f8f9fa;
+    border-left: 4px solid #667eea;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .announcement-item:hover {
+    background: #f0f2f8;
+  }
+
+  .announcement-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0.5rem;
+  }
+
+  .announcement-date {
+    font-size: 0.85rem;
+    color: #999;
+  }
+
+  .schedule-item {
+    background: #f8f9fa;
+    border-left: 4px solid #4facfe;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+  }
+
+  .schedule-item:hover {
+    background: #f0f7ff;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 2rem;
+    color: #999;
+  }
+
+  .empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
   }
 </style>
 
-<div class="dashboard-header text-center">
-  <h1 class="fw-bold mb-2">Dashboard Overview</h1>
-  <p class="fs-5 opacity-75">Welcome back! Here's your performance at a glance</p>
+<div class="dashboard-header">
+  <h1 class="mb-0">Welcome back!</h1>
+  <p class="mb-0 mt-2 opacity-75">Here's your dashboard overview</p>
 </div>
 
-<div class="row g-4 justify-content-center equal-cards">
+<!-- Stats Cards -->
+<div class="row g-4 mb-4">
   <!-- Courses Card -->
-  <div class="col-lg-4 col-md-6 d-flex">
-    <div class="enhanced-card">
-      <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);">
-        <i class="bi bi-book text-white"></i>
+  <div class="col-lg-4 col-md-6">
+    <div class="enhanced-card text-center">
+      <div class="stat-icon" style="background: linear-gradient(135deg, #667eea, #764ba2); color: white; margin-left: auto; margin-right: auto;">
+        <i class="bi bi-book"></i>
       </div>
-      <h5 class="text-center fw-bold text-dark mb-2">Total Courses</h5>
-      <p class="stat-number text-center">{{ $courses_count }}</p>
-      <p class="text-center text-muted small">Courses available this term</p>
+      <p class="stat-label">Total Courses</p>
+      <p class="stat-number">{{ $courses_count ?? 0 }}</p>
+      <p class="stat-description">Courses available</p>
     </div>
   </div>
 
   <!-- Schedules Card -->
-  <div class="col-lg-4 col-md-6 d-flex">
-    <div class="enhanced-card">
-      <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);">
-        <i class="bi bi-calendar-check text-white"></i>
+  <div class="col-lg-4 col-md-6">
+    <div class="enhanced-card text-center">
+      <div class="stat-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c); color: white; margin-left: auto; margin-right: auto;">
+        <i class="bi bi-calendar-check"></i>
       </div>
-      <h5 class="text-center fw-bold text-dark mb-2">Schedules</h5>
-      <p class="stat-number text-center">{{ \App\Models\Schedule::count() }}</p>
-      <p class="text-center text-muted small">Total scheduled slots</p>
+      <p class="stat-label">Schedules</p>
+      <p class="stat-number">{{ $schedules->count() ?? 0 }}</p>
+      <p class="stat-description">Scheduled slots</p>
     </div>
   </div>
 
   <!-- Announcements Card -->
-  <div class="col-lg-4 col-md-6 d-flex">
-    <div class="enhanced-card">
-      <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);">
-        <i class="bi bi-megaphone text-white"></i>
+  <div class="col-lg-4 col-md-6">
+    <div class="enhanced-card text-center">
+      <div class="stat-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe); color: white; margin-left: auto; margin-right: auto;">
+        <i class="bi bi-megaphone"></i>
       </div>
-      <h5 class="text-center fw-bold text-dark mb-2">Announcements</h5>
-      <p class="stat-number text-center">{{ $announcements_count }}</p>
-      <p class="text-center text-muted small">Active notices</p>
+      <p class="stat-label">Announcements</p>
+      <p class="stat-number">{{ $announcements->count() ?? 0 }}</p>
+      <p class="stat-description">Active notices</p>
     </div>
   </div>
 </div>
+
+<!-- Schedules Section -->
+<div class="content-section">
+  <h2 class="section-title">
+    <i class="bi bi-calendar-check me-2"></i>Your Schedules
+  </h2>
+  @if($schedules && $schedules->count() > 0)
+    <div class="row">
+      <div class="col-lg-8">
+        @foreach($schedules as $schedule)
+          <div class="schedule-item">
+            <div class="d-flex justify-content-between align-items-start">
+              <div>
+                <h6 class="announcement-title">{{ $schedule->title ?? $schedule->course->name ?? 'Schedule' }}</h6>
+                <p class="mb-2 text-dark">
+                  <i class="bi bi-clock me-2"></i>
+                  {{ $schedule->start_time ?? 'Time not specified' }} - {{ $schedule->end_time ?? '' }}
+                </p>
+                @if($schedule->location)
+                  <p class="mb-0 text-muted">
+                    <i class="bi bi-geo-alt me-2"></i>
+                    {{ $schedule->location }}
+                  </p>
+                @endif
+              </div>
+              <span class="badge bg-light text-dark">{{ \Carbon\Carbon::parse($schedule->date)->format('M d, Y') ?? 'N/A' }}</span>
+            </div>
+          </div>
+        @endforeach
+      </div>
+    </div>
+  @else
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-calendar-x"></i>
+      </div>
+      <p>No schedules available at the moment</p>
+    </div>
+  @endif
+</div>
+
+<!-- Announcements Section -->
+<div class="content-section">
+  <h2 class="section-title">
+    <i class="bi bi-megaphone me-2"></i>Announcements
+  </h2>
+  @if($announcements && $announcements->count() > 0)
+    <div class="row">
+      <div class="col-lg-8">
+        @foreach($announcements as $announcement)
+          <div class="announcement-item">
+            <div class="d-flex justify-content-between align-items-start">
+              <div class="flex-grow-1">
+                <h6 class="announcement-title">{{ $announcement->title }}</h6>
+                <p class="mb-2 text-dark">{{ Str::limit($announcement->description, 150) }}</p>
+                <p class="announcement-date mb-0">
+                  <i class="bi bi-calendar me-2"></i>
+                  {{ $announcement->created_at->format('M d, Y h:i A') }}
+                </p>
+              </div>
+              @if($announcement->is_important)
+                <span class="badge bg-danger ms-2">Important</span>
+              @endif
+            </div>
+          </div>
+        @endforeach
+      </div>
+    </div>
+  @else
+    <div class="empty-state">
+      <div class="empty-state-icon">
+        <i class="bi bi-megaphone"></i>
+      </div>
+      <p>No announcements at the moment</p>
+    </div>
+  @endif
+</div>
+
 @endsection

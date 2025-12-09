@@ -2,64 +2,90 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Schedule;
-use App\Models\Course;
 use Illuminate\Http\Request;
+use App\Models\Schedule;
+use App\Models\Announcement;
 
 class ScheduleController extends Controller
 {
     public function index()
     {
-        $schedules = Schedule::with('course')->orderBy('day')->orderBy('start_time')->get();
-        return view('schedules.index', compact('schedules'));
+        // Get schedules (no relationship needed because course_name is plain text)
+        $schedules = Schedule::orderBy('day')
+            ->orderBy('start_time')
+            ->get();
+
+        // Get announcements
+        $announcements = Announcement::all();
+
+        return view('schedules.index', compact('schedules', 'announcements'));
     }
 
     public function create()
     {
-        $courses = Course::orderBy('subject')->get();
-        return view('schedules.create', compact('courses'));
+        // No courses needed anymore (typing mode)
+        return view('schedules.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'day'=>'required|string',
-            'start_time'=>'required',
-            'end_time'=>'required',
-            'course_id'=>'nullable|exists:courses,id',
-            'location'=>'nullable|string|max:255',
+            'day'         => 'required|string',
+            'start_time'  => 'required',
+            'end_time'    => 'required',
+            'course_name' => 'nullable|string|max:255',
+            'location'    => 'nullable|string|max:255',
         ]);
 
-        Schedule::create($request->only('day','start_time','end_time','course_id','location'));
+        Schedule::create([
+            'day'         => $request->day,
+            'start_time'  => $request->start_time,
+            'end_time'    => $request->end_time,
+            'course_name' => $request->course_name,
+            'instructor_name'    => $request->instructor_name,
+            'location'    => $request->location,
+        ]);
 
-        return redirect()->route('schedules.index')->with('success','Schedule added.');
+        return redirect()->route('schedules.index')
+            ->with('success', 'Schedule added.');
     }
 
     public function edit(Schedule $schedule)
     {
-        $courses = Course::orderBy('subject')->get();
-        return view('schedules.edit', compact('schedule','courses'));
+        // No courses needed anymore (typing mode)
+        return view('schedules.edit', compact('schedule'));
     }
 
     public function update(Request $request, Schedule $schedule)
     {
         $request->validate([
-            'day'=>'required|string',
-            'start_time'=>'required',
-            'end_time'=>'required',
-            'course_id'=>'nullable|exists:courses,id',
-            'location'=>'nullable|string|max:255',
+            'day'         => 'required|string',
+            'start_time'  => 'required',
+            'end_time'    => 'required',
+            'course_name' => 'nullable|string|max:255',
+            'instructor_name' => 'nullable|string|max:255',
+            'location'    => 'nullable|string|max:255',
         ]);
 
-        $schedule->update($request->only('day','start_time','end_time','course_id','location'));
+        $schedule->update([
+            'day'         => $request->day,
+            'start_time'  => $request->start_time,
+            'end_time'    => $request->end_time,
+            'course_name' => $request->course_name,
+            'instructor_name' => $request->instructor_name,
+            'location'    => $request->location,
+        ]);
 
-        return redirect()->route('schedules.index')->with('success','Schedule updated.');
+        return redirect()->route('schedules.index')
+            ->with('success', 'Schedule updated.');
     }
 
     public function destroy(Schedule $schedule)
     {
         $schedule->delete();
-        return redirect()->route('schedules.index')->with('success','Schedule deleted.');
+
+        return redirect()->route('schedules.index')
+            ->with('success', 'Schedule deleted.');
     }
 
     public function show(Schedule $schedule)

@@ -19,7 +19,7 @@
 
 <div class="container py-5">
   <div class="text-center mb-5">
-    <h2 class="fw-bold text-gradient"> My Classes</h2>
+    <h2 class="fw-bold text-gradient"> My Courses</h2>
     <p class="text-muted">Overview of enrolled subjects</p>
     <a href="{{ route('courses.create') }}" class="btn btn-outline-primary btn-lg mt-3 shadow-sm">
       <i class="bi bi-plus-circle me-1"></i> Add Class

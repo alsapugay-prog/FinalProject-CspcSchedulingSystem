@@ -5,7 +5,11 @@
 <div class="text-center mb-4">
   <h2 class="accent">Weekly Class Schedule</h2>
   <p class="muted">Overview of your weekly timetable</p>
-  <a href="{{ route('schedules.create') }}" class="btn btn-primary mt-2">+ Add Schedule</a>
+
+  {{-- Admin only: Add button --}}
+  @if(auth()->user()->role === 'admin')
+      <a href="{{ route('schedules.create') }}" class="btn btn-primary mt-2">+ Add Schedule</a>
+  @endif
 </div>
 
 @if(session('success')) 
@@ -19,28 +23,39 @@
         <th>Day</th>
         <th>Time</th>
         <th>Course</th>
+        <th>Instructor</th>
         <th>Location</th>
         <th>Actions</th>
       </tr>
     </thead>
+
     <tbody>
       @foreach($schedules as $s)
       <tr>
         <td>{{ $s->day }}</td>
         <td>{{ \Carbon\Carbon::createFromTimeString($s->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::createFromTimeString($s->end_time)->format('h:i A') }}</td>
-        <td>{{ $s->course ? $s->course->subject : '-' }}</td>
+        <td>{{ $s->course_name ?? '-' }}</td>
+        <td>{{ $s->instructor_name ?? '-' }}</td>
         <td>{{ $s->location ?? '-' }}</td>
+
         <td>
-          <a href="{{ route('schedules.edit',$s) }}" class="btn btn-sm btn-warning">
-            <i class="fas fa-edit"></i> Edit
-          </a>
-          <form action="{{ route('schedules.destroy',$s) }}" method="POST" style="display:inline">
-              @csrf @method('DELETE')
-              <button class="btn btn-sm btn-danger">
-                <i class="fas fa-trash"></i> Delete
-              </button>
-          </form>
+            @if(auth()->user()->role === 'admin')
+                <a href="{{ route('schedules.edit',$s) }}" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+
+                <form action="{{ route('schedules.destroy',$s) }}" method="POST" style="display:inline">
+                    @csrf 
+                    @method('DELETE')
+                    <button class="btn btn-sm btn-danger">
+                        <i class="fas fa-trash"></i> Delete
+                    </button>
+                </form>
+            @else
+                <span class="text-muted">View Only</span>
+            @endif
         </td>
+
       </tr>
       @endforeach
     </tbody>
@@ -48,20 +63,10 @@
 </div>
 
 <style>
-  .accent {
-    color: #007bff;
-    font-weight: bold;
-  }
-  .muted {
-    color: #6c757d;
-  }
-  .glass-card {
-    background: rgba(255, 255, 255, 0.8);
-    backdrop-filter: blur(10px);
-  }
-  .table th, .table td {
-    vertical-align: middle;
-  }
+  .accent { color: #007bff; font-weight: bold; }
+  .muted { color: #6c757d; }
+  .glass-card { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); }
 </style>
 
 @endsection
+``

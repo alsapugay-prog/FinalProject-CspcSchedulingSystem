@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Announcement;
 use Illuminate\Http\Request;
+use App\Models\Announcement; 
 
 class AnnouncementController extends Controller
 {
@@ -17,8 +17,8 @@ class AnnouncementController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title'=>'required|max:255',
-            'body'=>'required'
+            'title' => 'required|max:255',
+            'body'  => 'required'
         ]);
 
         Announcement::create($request->only('title','body'));
@@ -35,8 +35,8 @@ class AnnouncementController extends Controller
     public function update(Request $request, Announcement $announcement)
     {
         $request->validate([
-            'title'=>'required|max:255',
-            'body'=>'required'
+            'title' => 'required|max:255',
+            'body'  => 'required'
         ]);
 
         $announcement->update($request->only('title','body'));

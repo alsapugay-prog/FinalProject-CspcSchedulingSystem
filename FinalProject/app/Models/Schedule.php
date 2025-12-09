@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Schedule extends Model
 {
-    protected $fillable = ['day','start_time','end_time','course_id','location'];
+    protected $fillable = ['day','start_time','end_time','course_name','instructor_name','location'];
 
     public function course()
     {
